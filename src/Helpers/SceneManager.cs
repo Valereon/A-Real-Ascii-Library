@@ -25,7 +25,7 @@ public class SceneManager
         while (!Raylib.WindowShouldClose())
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.RayWhite);
+            Raylib.ClearBackground(Color.Black);
             foreach (GameObject gameObject in gameObjects)
             {
                 foreach (Component component in gameObject.GetListOfComponents())

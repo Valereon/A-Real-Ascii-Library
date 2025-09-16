@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HughPH.Box2D" Version="2025.6.30.1625" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="Raylib-cs" Version="7.0.1" />
   </ItemGroup>

@@ -2,8 +2,7 @@
 using Raylib_cs;
 
 
-
-public class App()
+public class App
 {
     public static void Main(string[] args)
     {
@@ -13,13 +12,14 @@ public class App()
         SceneManager sceneManager = new SceneManager();
 
         GameObject myGameObject = new GameObject();
-        myGameObject.AddComponent(new SpriteRenderer());
+        myGameObject.AddComponent(new SpriteRenderer("D:\\Github\\GitHub\\A-Real-Ascii-Library\\example.txt"));
         myGameObject.AddComponent(new PlayerMovement());
 
-        myGameObject.transform.scale = new Vector3(25, 25, 0);
+        myGameObject.transform.scale = new Vector3(10, 10, 0);
 
         // Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\Urban Shadow Sans Serif.otf");
-        Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\TheConfessionRegular-YBpv.ttf");
+        // Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\TheConfessionRegular-YBpv.ttf");
+        Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\monofonto rg.otf");
         Fonts.SetFontFilterToPoint(myFont);
         Fonts.SetDefaultFont(myFont);
         sceneManager.Start();
