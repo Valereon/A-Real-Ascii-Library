@@ -1,6 +1,6 @@
 namespace A_Real_Ascii_Library.Helpers.Static;
 
-public class Vector3
+public struct Vector3
 {
     public float x, y, z;
 
@@ -21,14 +21,9 @@ public class Vector3
         this.z = z;
     }
 
-    public System.Numerics.Vector3 ToNumerics()
-    {
-        return new System.Numerics.Vector3(x, y, z);
-    }
-
     public Num AsNum()
     {
-        return new Num(new Vector3(x, y, z));
+        return new Num(this);
     }
 
     public Vector2 DropZ()
@@ -36,14 +31,14 @@ public class Vector3
         return new Vector2(x, y);
     }
 
-    public Vector2 DropY(Vector3 vector)
+    public Vector2 DropY()
     {
-        return new Vector2(vector.x, vector.z);
+        return new Vector2(x, z);
     }
 
-    public Vector2 DropX(Vector3 vector)
+    public Vector2 DropX()
     {
-        return new Vector2(vector.y, vector.z);
+        return new Vector2(y, z);
     }
 
 
@@ -55,30 +50,36 @@ public class Vector3
 
 public class Num
 {
-    private Vector3 _vector;
+    private System.Numerics.Vector3 _vector;
 
     public Num(Vector3 vector)
     {
-        this._vector = vector;
+        _vector = new(vector.x, vector.y, vector.z);
     }
+    
+    public System.Numerics.Vector3 GetVector()
+    {
+        return _vector;
+    }
+
 
     public System.Numerics.Vector2 DropZ()
     {
-        return new System.Numerics.Vector2(_vector.x, _vector.y);
+        return new System.Numerics.Vector2(_vector.X, _vector.Y);
     }
 
     public System.Numerics.Vector2 DropY()
     {
-        return new System.Numerics.Vector2(_vector.x, _vector.z);
+        return new System.Numerics.Vector2(_vector.X, _vector.Z);
     }
 
     public System.Numerics.Vector2 DropX()
     {
-        return new System.Numerics.Vector2(_vector.y, _vector.z);
+        return new System.Numerics.Vector2(_vector.Z, _vector.Z);
     }
 
-    public Vector3 ToVec3()
+    public Vector3 ToARALVec3()
     {
-        return _vector;
+        return new Vector3(_vector.X, _vector.Y, _vector.Z);
     }
 }

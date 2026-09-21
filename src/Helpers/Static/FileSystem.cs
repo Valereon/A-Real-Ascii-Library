@@ -2,20 +2,15 @@ namespace A_Real_Ascii_Library.Helpers.Static;
 
 static class FileSystem
 {
-    public static string fileSystemRoot = string.Empty;
-    public static string PathSeparator = @"\";
-
-
     public static string ReadFile(string filePath)
     {
 
-        filePath = MakePathAbsolute(filePath);
+        filePath = Path.GetFullPath(filePath);
         if (!File.Exists(filePath))
             throw new ARALFSException($"Could not read File, '{filePath}' Does not exist");
 
         try
         {
-            // Console.WriteLine(File.ReadAllText(filePath));
             return File.ReadAllText(filePath);
         }
         catch (UnauthorizedAccessException)
@@ -32,9 +27,7 @@ static class FileSystem
     /// </summary>
     public static void WriteFile(string filePath, string text)
     {
-
-
-        filePath = MakePathAbsolute(filePath);
+        filePath = Path.GetFullPath(filePath);
 
         try
         {
@@ -52,7 +45,7 @@ static class FileSystem
 
     public static void DeleteFile(string filePath)
     {
-        filePath = MakePathAbsolute(filePath);
+        filePath = Path.GetFullPath(filePath);
 
         if (!File.Exists(filePath))
             throw new ARALFSException($"Could not delete File, '{filePath}' Does not exist");
@@ -72,7 +65,7 @@ static class FileSystem
 
     public static void CreateDirectory(string filePath)
     {
-        filePath = MakePathAbsolute(filePath);
+        filePath = Path.GetFullPath(filePath);
         try
         {
             Directory.CreateDirectory(filePath);
@@ -88,7 +81,7 @@ static class FileSystem
     }
     public static void DeleteDirectory(string filePath)
     {
-        filePath = MakePathAbsolute(filePath);
+        filePath = Path.GetFullPath(filePath);
         if (!File.Exists(filePath))
             throw new ARALFSException($"Could not delete directory, '{filePath}' Does not exist");
 
@@ -107,71 +100,4 @@ static class FileSystem
     }
 
 
-
-
-    
-    /// <summary>
-    /// This will take any path including relative paths. Clean them and turn them absolute including ".\" "\" or "python.exe"
-    /// </summary>
-    public static string MakePathAbsolute(string path)
-    {
-        if (path == null)
-            return string.Empty;
-
-        //crude path check
-        if (path.Contains(PathSeparator))
-        {
-            if (path.Contains($@".{PathSeparator}"))
-            {
-                Path.GetFullPath(Path.Combine(fileSystemRoot, path));
-            }
-        }
-
-        if (path.Contains(fileSystemRoot))
-        {
-            return path;
-        }
-        else
-        {
-            return Path.GetFullPath(Path.Combine(fileSystemRoot, path.TrimStart('\\', '/')));
-        }
-    }
-
-    /// <summary>
-    /// Takes an absolute path and returns a path relative to the root of the project.
-    /// used for the paths in toml
-    /// </summary>
-    public static string MakePathRelative(string path)
-    {
-        if (path.Contains(fileSystemRoot))
-        {
-            return path.Replace(fileSystemRoot, @$".");
-        }
-        else
-        {
-            if (path.Contains(@$".{PathSeparator}"))
-            {
-                return path;
-            }
-            return $@".{PathSeparator}{path}";
-        }
-    }
-
-    /// <summary>
-    /// Tries to remove the exe ending from the path and if it cannot then it returns the original path
-    /// </summary>
-    //TODO : CHANGE THIS TO BE FILE ENDING NOT JUST EXE
-    public static string TryRemoveExeEnding(string path)
-    {
-        if (path.EndsWith(".exe"))
-        {
-            return path.Replace(".exe", string.Empty);
-        }
-
-        return path;
-    }
-    public static void UpdatePathSeparator()
-    {
-        PathSeparator = Path.DirectorySeparatorChar.ToString();
-    }
 }

@@ -8,9 +8,6 @@ public class GridSnap : Component
     private float gridSizeX;
     private float gridSizeY;
 
-
-
-
     public override void Update()
     {
         Vector3 currentPos = gameObject.transform.GetPosition();
@@ -27,8 +24,6 @@ public class GridSnap : Component
         gameObject.transform.SetPosition(currentPos);
     }
 
-
-
     public void ToggleCustomGrid(bool state)
     {
         hasCustomGrid = state;
@@ -43,9 +38,4 @@ public class GridSnap : Component
     {
         gridSizeY = size;
     }
-
-
-
-
-
 }

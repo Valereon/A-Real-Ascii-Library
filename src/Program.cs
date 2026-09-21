@@ -1,6 +1,5 @@
-﻿using System.Globalization;
+﻿using A_Real_Ascii_Library;
 using A_Real_Ascii_Library.BuiltInComponents;
-using Microsoft.VisualBasic;
 using Raylib_cs;
 using A_Real_Ascii_Library.Helpers.Static;
 
@@ -14,24 +13,28 @@ public class App
         SceneManager sceneManager = new SceneManager();
 
         GameObject myGameObject = new GameObject("ardvark");
-        myGameObject.AddComponent(new SpriteRenderer("D:\\Github\\GitHub\\A-Real-Ascii-Library\\example.txt"));
-        myGameObject.AddComponent(new PlayerMovement());
-        
+        SpriteRenderer sprite2 = myGameObject.AddComponent<SpriteRenderer>();
+        sprite2.LoadSprite("H:\\Github\\GitHub\\A-Real-Ascii-Library\\example.txt");
+
+        myGameObject.AddComponent<PlayerMovement>();
+        myGameObject.AddComponent<UserMovement>();
 
 
 
         GameObject childGameObject = new GameObject("deer");
         childGameObject.transform.parent = myGameObject.transform;
         myGameObject.transform.child = childGameObject.transform;
-        childGameObject.AddComponent(new SpriteRenderer("D:\\Github\\GitHub\\A-Real-Ascii-Library\\example copy.txt"));
+        SpriteRenderer sprite = childGameObject.AddComponent<SpriteRenderer>();
+        sprite.LoadSprite("H:\\Github\\GitHub\\A-Real-Ascii-Library\\example copy.txt");
         // childGameObject.AddComponent(new PlayerMovement()); 
         childGameObject.transform.SetLocalPosition(new Vector3(500, 50, 0));
 
 
 
         GameObject debug = new GameObject("Debug");
-        debug.AddComponent(new CustomDebug());
-        debug.AddComponent(new TextDisplay("fuck"));
+        debug.AddComponent<CustomDebug>();
+        TextDisplay textDisplay = debug.AddComponent<TextDisplay>();
+        textDisplay.text = "Fuck";
 
 
 
@@ -39,7 +42,7 @@ public class App
 
         // Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\Urban Shadow Sans Serif.otf");
         // Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\TheConfessionRegular-YBpv.ttf");
-        Font myFont = Fonts.LoadFont("D:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\monofonto rg.otf");
+        Font myFont = Fonts.LoadFont("H:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\monofonto rg.otf");
         Fonts.SetFontFilterToPoint(myFont);
         Fonts.SetDefaultFont(myFont);
 

@@ -15,6 +15,7 @@ public class Transform : Component
     {
         localPosition = Vector3.zero;
         parent = null;
+        child = null;
         position = Vector3.zero;
         rotation = Vector3.zero;
         scale = Vector3.one;
@@ -23,7 +24,7 @@ public class Transform : Component
     public Vector3 GetPosition()
     {
         if (parent == null)
-            return localPosition;
+            return position;
 
         Vector3 parentPos = parent.GetPosition();
         return new Vector3(
@@ -46,11 +47,11 @@ public class Transform : Component
     {
         if (parent == null)
         {
-            return $"World Positioin: {position}; Local pos {localPosition}; scale {scale}; rotation {rotation}; parent: null";
+            return $"World Position: {position}; Local pos {localPosition}; scale {scale}; rotation {rotation}; parent: null";
         }
         else
         {
-            return $"World Positioin: {position}; Local pos {localPosition}; scale {scale}; rotation {rotation}; parent: {parent.gameObject.name}";
+            return $"World Position: {position}; Local pos {localPosition}; scale {scale}; rotation {rotation}; parent: {parent.gameObject.name}";
         }
     }
 }
