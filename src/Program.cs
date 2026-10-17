@@ -14,8 +14,8 @@ public class App
 
 
         GameObject myGameObject = new GameObject("ardvark");
-        SpriteRenderer sprite2 = myGameObject.AddComponent<SpriteRenderer>();
-        sprite2.LoadSprite("H:\\Github\\GitHub\\A-Real-Ascii-Library\\example.txt");
+        SpriteRenderer sprite = myGameObject.AddComponent<SpriteRenderer>();
+        sprite.LoadSprite("resources/example.txt");
 
         myGameObject.AddComponent<PlayerMovement>();
         myGameObject.AddComponent<UserMovement>();
@@ -25,8 +25,8 @@ public class App
         GameObject childGameObject = new GameObject("deer");
         childGameObject.Transform.parent = myGameObject.Transform;
         myGameObject.Transform.child = childGameObject.Transform;
-        SpriteRenderer sprite = childGameObject.AddComponent<SpriteRenderer>();
-        sprite.LoadSprite("H:\\Github\\GitHub\\A-Real-Ascii-Library\\example copy.txt");
+        SpriteRenderer sprite2 = childGameObject.AddComponent<SpriteRenderer>();
+        sprite2.LoadSprite("resources/example copy.txt");
         // childGameObject.AddComponent(new PlayerMovement()); 
         childGameObject.Transform.SetLocalPosition(new Vector3(500, 50, 0));
 
@@ -41,7 +41,7 @@ public class App
 
         // myGameObject.transform.scale = new Vector3(10, 10, 0);
 
-        Font myFont = Fonts.LoadFont("H:\\Github\\GitHub\\A-Real-Ascii-Library\\src\\monofonto rg.otf");
+        Font myFont = Fonts.LoadFont("resources/monofonto rg.otf");
         Fonts.SetFontFilterToPoint(myFont);
         Fonts.SetDefaultFont(myFont);
 

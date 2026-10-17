@@ -2,3 +2,4 @@ newProject/
 obj/
 bin/
 **/.vscode/
+.idea/
