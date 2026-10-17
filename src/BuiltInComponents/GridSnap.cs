@@ -10,7 +10,7 @@ public class GridSnap : Component
 
     public override void Update()
     {
-        Vector3 currentPos = gameObject.transform.GetPosition();
+        Vector3 currentPos = gameObject.Transform.GetPosition();
         if (hasCustomGrid)
         {
             currentPos.x = MathF.Round(currentPos.x / gridSizeX) * gridSizeX;
@@ -21,7 +21,7 @@ public class GridSnap : Component
             currentPos.x = MathF.Round(currentPos.x / gridSize) * gridSize;
             currentPos.y = MathF.Round(currentPos.y / gridSize) * gridSize;
         }
-        gameObject.transform.SetPosition(currentPos);
+        gameObject.Transform.SetPosition(currentPos);
     }
 
     public void ToggleCustomGrid(bool state)

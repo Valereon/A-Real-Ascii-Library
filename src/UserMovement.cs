@@ -10,16 +10,22 @@ public class UserMovement : Component
 
     public override void Update()
     {
-        // if (Raylib.IsKeyPressed(KeyboardKey.C))
-        // {
-        //     gameObject.AddComponent(new PlayerMovement());
-        // }
+        if (Raylib.IsKeyPressed(KeyboardKey.C))
+        {
+            gameObject.AddComponent<PlayerMovement>();
+        }
 
-        // if (Raylib.IsKeyPressed(KeyboardKey.F))
-        // {
-        //     gameObject.RemoveComponent<PlayerMovement>();
-        // }
+        if (Raylib.IsKeyPressed(KeyboardKey.F))
+        {
+            gameObject.RemoveComponent<PlayerMovement>();
+        }
+        if (Raylib.IsKeyPressed(KeyboardKey.G))
+        {
+            gameObject.AddComponent<SpriteRenderer>();
+        }
 
+        if (Raylib.IsKeyPressed(KeyboardKey.V))
+            gameObject.RemoveComponent<SpriteRenderer>();
 
 
     }

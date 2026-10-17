@@ -8,7 +8,7 @@ public class PlayerMovement : Component
 
     public override void Update()
     {
-        Vector3 position = gameObject.transform.GetPosition();
+        Vector3 position = gameObject.Transform.GetPosition();
         if (Raylib.IsKeyDown(KeyboardKey.D))
         {
             position.x += movementStep;
@@ -25,7 +25,7 @@ public class PlayerMovement : Component
         {
             position.y += movementStep;
         }
-        gameObject.transform.SetPosition(position);
+        gameObject.Transform.SetPosition(position);
         
     }
 }

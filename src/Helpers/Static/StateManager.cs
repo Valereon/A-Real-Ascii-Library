@@ -15,6 +15,7 @@ public static class StateManager
     public static List<Font> loadedFonts = new();
     public static STATE state;
     public static Action<STATE>? onStateChanged;
+    public static Action<bool>? onStart;
     
 
 
@@ -22,6 +23,7 @@ public static class StateManager
     {
         state = STATE.PLAY;
         onStateChanged?.Invoke(state);
+        onStart?.Invoke(true);
     }
 
 

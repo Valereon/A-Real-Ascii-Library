@@ -11,9 +11,10 @@ public class TextDisplay : Component, IRenderable
     public int spacing = 1;
     public Color color = Color.White;
 
+    public int layer {get;} = 0;
 
     public void Render()
     {
-        ARAL.Drawing.DrawText(text, gameObject.transform, Color.White);
+        ARAL.Drawing.DrawText(text, gameObject.Transform, Color.White);
     }
 }

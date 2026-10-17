@@ -9,9 +9,11 @@ public class SpriteRenderer : Component, IRenderable
 {
     public int fontSize = 20;
     string sprite = "";
-    string spritePath;
+    string spriteFilePath;
     public int spacing = 1;
     public Color color = Color.White;
+
+    public int layer {get;} = 0;
 
     public override void Update()
     {
@@ -20,19 +22,19 @@ public class SpriteRenderer : Component, IRenderable
 
     public void Render()
     {
-        ARAL.Drawing.DrawText(sprite, gameObject.transform, color, fontSize, spacing);
+        ARAL.Drawing.DrawText(sprite, gameObject.Transform, color, fontSize, spacing);
     }
 
     public void LoadSprite(string filePath)
     {
-        spritePath = filePath;
+        spriteFilePath = filePath;
         sprite = FileSystem.ReadFile(filePath);
         sprite = Regex.Replace(sprite, @"\r\n", "\n");
     }
 
     public void ReloadSprite()
     {
-        sprite = FileSystem.ReadFile(spritePath);
+        sprite = FileSystem.ReadFile(spriteFilePath);
         sprite = Regex.Replace(sprite, @"\r\n", "\n");
     }
 }

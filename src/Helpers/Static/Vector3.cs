@@ -21,9 +21,9 @@ public struct Vector3
         this.z = z;
     }
 
-    public Num AsNum()
+    public System.Numerics.Vector3 AsNum()
     {
-        return new Num(this);
+        return new System.Numerics.Vector3(x,y,z);
     }
 
     public Vector2 DropZ()
@@ -44,42 +44,7 @@ public struct Vector3
 
     public override string ToString()
     {
-        return $"{x} {y} {z}";
+        return $"X: {x}, Y: {y}, Z: {z}";
     }
 }
 
-public class Num
-{
-    private System.Numerics.Vector3 _vector;
-
-    public Num(Vector3 vector)
-    {
-        _vector = new(vector.x, vector.y, vector.z);
-    }
-    
-    public System.Numerics.Vector3 GetVector()
-    {
-        return _vector;
-    }
-
-
-    public System.Numerics.Vector2 DropZ()
-    {
-        return new System.Numerics.Vector2(_vector.X, _vector.Y);
-    }
-
-    public System.Numerics.Vector2 DropY()
-    {
-        return new System.Numerics.Vector2(_vector.X, _vector.Z);
-    }
-
-    public System.Numerics.Vector2 DropX()
-    {
-        return new System.Numerics.Vector2(_vector.Z, _vector.Z);
-    }
-
-    public Vector3 ToARALVec3()
-    {
-        return new Vector3(_vector.X, _vector.Y, _vector.Z);
-    }
-}

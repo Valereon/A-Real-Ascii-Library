@@ -5,36 +5,49 @@ using Raylib_cs;
 public class SceneManager
 {
 
-    private static List<GameObject> gameObjects = new();
+    private static List<GameObject> _gameObjects = new();
+    private static List<GameObject> _renderableObjects = new();
+    // game objects waiting for their component changes to be applied via applydefferedChanges
+    private static Queue<GameObject> _pendingGameObjects = new();
 
-    public static A_Real_Ascii_Library.BuiltInComponents.Transform root { get; }
     public static void RegisterGameObject(GameObject gameObject)
     {
-        gameObjects.Add(gameObject);
+        _gameObjects.Add(gameObject);
     }
-    public static List<GameObject> ListGameObjectsUnordered()
+    public static void DeRegisterGameObject(GameObject gameObject)
     {
-        return gameObjects;
+        //TODO bounds check
+        _gameObjects.Remove(gameObject);
     }
-    public static void RegisterComponentAdd()
+    public static void RegisterRenderableGameObject(GameObject renderable)
     {
-        
+        _renderableObjects.Add(renderable);
     }
-    public static void RegisterComponentRemove()
+    public static void DeRegisterRenderableGameObject(GameObject renderable)
     {
-        
+        //TODO bounds check
+        _renderableObjects.Remove(renderable);
+    }
+    public static void EnqueueGameObjectToChange(GameObject gameObject)
+    {
+        _pendingGameObjects.Enqueue(gameObject);
+    }
+    public static GameObject[] ListGameObjectsUnordered()
+    {
+        return _gameObjects.ToArray();
     }
 
-    public void Start()
+    public static void Start()
     {
-        for (int i = 0; i < gameObjects.Count; i++)
+        for (int i = 0; i < _gameObjects.Count; i++)
         {
-            GameObject currGameObject = gameObjects[i];
+            GameObject currGameObject = _gameObjects[i];
+
 
             if (!currGameObject.isEnabled)
                 continue;
 
-            List<Component> components = currGameObject.GetListOfComponents();
+            List<Component> components = currGameObject.GetComponents();
             for (int j = 0; j < components.Count; j++)
             {
                 Component currentComponent = components[j];
@@ -46,33 +59,35 @@ public class SceneManager
     }
 
 
-    public void Loop()
+    public static void Loop()
     {
+        //TODO make a better version of this via a window class and something to wrap the drawing calls
         while (!Raylib.WindowShouldClose())
         {
             // physics update here
-            UpdateGameobjects();
+            UpdateGameObjects();
             // late update here for camera stuff
+            GatherDrawCalls();
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.Black);
-            RenderGameobjects();
+            Renderer.Render();
             Raylib.EndDrawing();
+            ApplyGameObjectComponentChanges();
         }
     }
 
 
-    void UpdateGameobjects()
+    static void UpdateGameObjects()
     {
-        GameObject[] gameObjectsArray = gameObjects.ToArray();
-        for (int i = 0; i < gameObjectsArray.Length; i++)
+        for (int i = 0; i < _gameObjects.Count; i++)
         {
-            GameObject currGameObject = gameObjectsArray[i];
+            GameObject currGameObject = _gameObjects[i];
 
             if (!currGameObject.isEnabled)
                 continue;
 
-            Component[] components = currGameObject.GetListOfComponents().ToArray();
-            for (int j = 0; j < components.Length; j++)
+            List<Component> components = currGameObject.GetComponents();
+            for (int j = 0; j < components.Count; j++)
             {
                 Component currentComponent = components[j];
                 if (!currentComponent.IsEnabled)
@@ -82,24 +97,30 @@ public class SceneManager
         }
     }
 
-    void RenderGameobjects()
+    static void GatherDrawCalls()
     {
-        GameObject[] gameObjectsArray = gameObjects.ToArray();
-        for (int i = 0; i < gameObjectsArray.Length; i++)
+        for (int i = 0; i < _renderableObjects.Count; i++)
         {
-            GameObject currGameObject = gameObjectsArray[i];
+            GameObject currGameObject = _renderableObjects[i];
 
             if (!currGameObject.isEnabled)
                 continue;
 
-            IRenderable[] components = currGameObject.GetListOfRenderableComponents().ToArray();
-            for (int j = 0; j < components.Length; j++)
+            List<IRenderable> components = currGameObject.GetRenderableComponents();
+            for (int j = 0; j < components.Count; j++)
             {
                 IRenderable currentComponent = components[j];
-                if (currentComponent is Component comp && !comp.gameObject.isEnabled)
-                    continue;
                 currentComponent.Render();
             }
+        }
+    }
+
+    static void ApplyGameObjectComponentChanges()
+    {
+        while(_pendingGameObjects.Count > 0)
+        {
+            GameObject gameObject = _pendingGameObjects.Dequeue();
+            gameObject.ProcessDeferredComponentChanges();
         }
     }
 }

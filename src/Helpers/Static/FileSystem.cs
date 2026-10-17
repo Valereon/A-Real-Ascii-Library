@@ -8,7 +8,6 @@ static class FileSystem
         filePath = Path.GetFullPath(filePath);
         if (!File.Exists(filePath))
             throw new ARALFSException($"Could not read File, '{filePath}' Does not exist");
-
         try
         {
             return File.ReadAllText(filePath);

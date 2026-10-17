@@ -6,9 +6,9 @@ public class CustomDebug : Component
     {
         string finalString = string.Empty;
 
-        // finalString += string.Concat(
-            // SceneManager.gameObjects.Select(obj => obj.ToString())
-        // );
-        // gameObject.GetComponent<TextDisplay>().text = finalString;
+        finalString += string.Concat(
+            SceneManager.ListGameObjectsUnordered().Select(obj => obj.ToString())
+        );
+        gameObject.GetComponent<TextDisplay>().text = finalString;
     }
 }

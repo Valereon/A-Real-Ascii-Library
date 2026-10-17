@@ -1,5 +1,5 @@
 namespace A_Real_Ascii_Library.Helpers.Static;
-public class Vector2
+public struct Vector2
 {
     public float x, y;
 

@@ -8,7 +8,7 @@ animations from files
 prefabs
 make a bunch of public events for debug and other stuff
 make an audio manager 
-wrap all of the dumbass raylib functions so the user never has to touch system.numerics.vector2/3 so i dont have to do a buncha bullshit and just wrap them for ease anyway
+// wrap all of the dumbass raylib functions so the user never has to touch system.numerics.vector2/3 so i dont have to do a buncha bullshit and just wrap them for ease anyway
 
 
 
@@ -105,7 +105,6 @@ could be kind of cool to make some sort of spatial hashing thing thats like mine
 so the plan is for inter component communciaton to be just straight referneces like getcomponent<health>().takedamage(5) based on the hitbox reciving a on trigger enter thing, but then when we need to talk betwene objects so lets say i hit the player as an enemy the data that i need to send to the player of HEY i hit you adn the damage you need to take is via events or a message bus and not direct calls
 
 
-
-
-# make a render queue
 # make a gameobject change queue based on changes made"?
+# fix the fucking isenabled trigger on gameobjects
+# more error checking around internal compoennts with proper error messages

@@ -4,13 +4,13 @@ public abstract class Component
 {
 
     public GameObject gameObject;
-    bool isEnabled = true;
+    bool _isEnabled = true;
     public bool IsEnabled
     {
-        get => isEnabled;
+        get => _isEnabled;
         set
         {
-            isEnabled = value;
+            _isEnabled = value;
             if (value)
                 OnEnable();
         }

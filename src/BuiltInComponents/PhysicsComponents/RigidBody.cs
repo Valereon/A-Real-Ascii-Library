@@ -11,7 +11,7 @@ public class RigidBody : Component
 
     public override void Update()
     {
-        Vector3 objectPosition = gameObject.transform.GetPosition();
+        Vector3 objectPosition = gameObject.Transform.GetPosition();
 
 
         // if(isUsingGravity)

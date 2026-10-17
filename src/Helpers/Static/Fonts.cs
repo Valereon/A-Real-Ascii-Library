@@ -3,9 +3,10 @@ using Raylib_cs;
 namespace A_Real_Ascii_Library.Helpers.Static;
 static class Fonts
 {
-    static int DefaultFontSize = 20;
-    static Font DEFAULT_FONT;
-    static Color DEFAULT_FONT_COLOR = Color.Black;
+    static int _defaultFontSize = 20;
+    static float _defaultFontSpacing = 1f;
+    static Font _defaultFont;
+    static Color _defaultFontColor = Color.Black;
     public static Font LoadFont(string fileLocation)
     {
         Font font = Raylib.LoadFontEx(fileLocation, 256, null, 0);
@@ -26,12 +27,12 @@ static class Fonts
 
     public static void SetDefaultFontSize(int size)
     {
-        DefaultFontSize = size;
+        _defaultFontSize = size;
     }
 
     public static int GetDefaultFontSize()
     {
-        return DefaultFontSize;
+        return _defaultFontSize;
     }
 
     public static void SetFontFilterToPoint(Font font)
@@ -52,24 +53,31 @@ static class Fonts
 
     public static void SetDefaultFont(Font font)
     {
-        DEFAULT_FONT = font;
+        _defaultFont = font;
     }
 
     public static Font GetDefaultFont()
     {
-        return DEFAULT_FONT;
+        return _defaultFont;
     }
 
     public static Color GetDefaultFontColor()
     {
-        return DEFAULT_FONT_COLOR;
+        return _defaultFontColor;
     }
 
     public static void SetDefaultFontColor(Color color)
     {
-        DEFAULT_FONT_COLOR = color;
+        _defaultFontColor = color;
     }
 
-
+    public static float GetDefaultFontSpacing()
+    {
+        return _defaultFontSpacing;
+    }
+    public static void SetDefaultFontSpacing(float fontSpacing)
+    {
+        _defaultFontSpacing = fontSpacing;
+    }
 
 }
