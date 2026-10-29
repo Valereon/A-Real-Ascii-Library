@@ -17,6 +17,8 @@ make an audio manager
 
 make premade UI widgets like buttons and text areas
 
+
+
 make required component shit
 
 

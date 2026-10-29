@@ -1,4 +1,5 @@
 // this will be done by reading scene files later but for now its this 
+using System.Collections.ObjectModel;
 using A_Real_Ascii_Library.BuiltInComponents;
 using Raylib_cs;
 
@@ -47,7 +48,7 @@ public class SceneManager
             if (!currGameObject.isEnabled)
                 continue;
 
-            List<Component> components = currGameObject.GetComponents();
+            ReadOnlyCollection<Component> components = currGameObject.GetAllValidComponents();
             for (int j = 0; j < components.Count; j++)
             {
                 Component currentComponent = components[j];
@@ -86,7 +87,7 @@ public class SceneManager
             if (!currGameObject.isEnabled)
                 continue;
 
-            List<Component> components = currGameObject.GetComponents();
+            ReadOnlyCollection<Component> components = currGameObject.GetAllValidComponents();
             for (int j = 0; j < components.Count; j++)
             {
                 Component currentComponent = components[j];
@@ -106,7 +107,7 @@ public class SceneManager
             if (!currGameObject.isEnabled)
                 continue;
 
-            List<IRenderable> components = currGameObject.GetRenderableComponents();
+            ReadOnlyCollection<IRenderable> components = currGameObject.GetAllValidRenderableComponents();
             for (int j = 0; j < components.Count; j++)
             {
                 IRenderable currentComponent = components[j];

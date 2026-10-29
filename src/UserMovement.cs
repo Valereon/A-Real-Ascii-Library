@@ -6,7 +6,7 @@ namespace A_Real_Ascii_Library;
 public class UserMovement : Component
 {
 
-    int i = 0;
+
 
     public override void Update()
     {

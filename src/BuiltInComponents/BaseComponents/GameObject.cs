@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using JetBrains.Annotations;
 
@@ -5,13 +6,14 @@ namespace A_Real_Ascii_Library.BuiltInComponents;
 
 public class GameObject
 {
-    public Transform Transform {get;}
-    public string name = "NoName";
+    public Transform Transform { get; }
+    public string name { get; set; }
     public bool isEnabled = true;
+
     List<Component> _components = new();
     List<IRenderable> _renderableComponents = new();
-    bool isChangesQueued = false;
-    bool isRenderable = false;
+    bool _isChangesQueued = false;
+    bool _isRenderable = false;
     Queue<Component> _componentsToAdd = new();
     Queue<Component> _componentsToRemove = new();
     Queue<IRenderable> _renderableComponentsToAdd = new();
@@ -36,15 +38,18 @@ public class GameObject
 
     public T AddComponent<T>() where T : Component, new()
     {
-        T comp = new T();
-        comp.gameObject = this;
+        T comp = new T
+        {
+            gameObject = this
+        };
+
         if (comp is IRenderable renderable)
             _renderableComponentsToAdd.Enqueue(renderable);
         _componentsToAdd.Enqueue(comp);
 
-        if (!isChangesQueued)
+        if (!_isChangesQueued)
         {
-            isChangesQueued = true;
+            _isChangesQueued = true;
             SceneManager.EnqueueGameObjectToChange(this);
         }
 
@@ -58,8 +63,7 @@ public class GameObject
         if (_components.Count <= 0)
             throw new ARALException($"Gameobject {name} has no component of type {typeof(T)}");
 
-        //TODO: turn this into get component
-        Component? comp = _components.FirstOrDefault(key => key is T);
+        Component? comp = GetComponent<T>();
 
         if (comp is null)
             throw new ARALException($"Gameobject {name} has no component of type {typeof(T)}");
@@ -74,15 +78,15 @@ public class GameObject
             _componentsToRemove.Enqueue(comp);
 
 
-        if (!isChangesQueued)
+        if (!_isChangesQueued)
         {
-            isChangesQueued = true;
+            _isChangesQueued = true;
             SceneManager.EnqueueGameObjectToChange(this);
         }
     }
 
 
-    public T GetComponent<T>() where T : Component
+    public T? GetComponent<T>() where T : Component
     {
         foreach (Component targetComponent in _components)
         {
@@ -92,23 +96,46 @@ public class GameObject
             }
         }
         Component? comp = _componentsToAdd.FirstOrDefault(key => key is T);
-        if(comp != null)  
+
+        if (comp != null)
             return (T)comp;
 
-        //TODO: make this return do literally anything else
+
         return null;
     }
 
-    // TODO: make this also check the queue to add and return those as well and not return the live list of components maybe a copy or Ireadonly
-    public List<Component> GetComponents()
+
+    public ReadOnlyCollection<Component> GetComponents()
     {
-        return _components;
+        return _components.AsReadOnly();
     }
 
-    // todo dont return live list
-    public List<IRenderable> GetRenderableComponents()
+    public ReadOnlyCollection<Component> GetAllComponents()
     {
-        return _renderableComponents;
+        List<Component> temp = [.. _components, .. _componentsToAdd.ToList(), .. _componentsToRemove.ToList()];
+        return temp.AsReadOnly();
+    }
+    public ReadOnlyCollection<Component> GetAllValidComponents()
+    {
+        List<Component> temp = [.. _components, .. _componentsToAdd.ToList()];
+        return temp.AsReadOnly();
+    }
+
+    public ReadOnlyCollection<IRenderable> GetRenderableComponents()
+    {
+        return _renderableComponents.AsReadOnly();
+    }
+
+    public ReadOnlyCollection<IRenderable> GetAllRenderableComponents()
+    {
+        List<IRenderable> temp = [.. _renderableComponents, .. _renderableComponentsToAdd.ToList(), .. _renderableComponentsToRemove.ToList()];
+        return temp.AsReadOnly();
+    }
+
+    public ReadOnlyCollection<IRenderable> GetAllValidRenderableComponents()
+    {
+        List<IRenderable> temp = [.. _renderableComponents, .. _renderableComponentsToAdd.ToList()];
+        return temp.AsReadOnly();
     }
 
     public void ProcessDeferredComponentChanges()
@@ -116,9 +143,8 @@ public class GameObject
         DeferredComponentAdd();
         DeferredComponentRemove();
         UpdateRenderableState();
-        isChangesQueued = false;
+        _isChangesQueued = false;
     }
-
 
     void DeferredComponentAdd()
     {
@@ -150,10 +176,10 @@ public class GameObject
     void UpdateRenderableState()
     {
         bool shouldBeRenderable = _renderableComponents.Count > 0;
-        if(shouldBeRenderable == isRenderable)
+        if (shouldBeRenderable == _isRenderable)
             return;
-        isRenderable = shouldBeRenderable;
-        if(isRenderable)
+        _isRenderable = shouldBeRenderable;
+        if (_isRenderable)
             SceneManager.RegisterRenderableGameObject(this);
         else
             SceneManager.DeRegisterRenderableGameObject(this);

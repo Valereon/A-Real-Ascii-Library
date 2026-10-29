@@ -10,9 +10,12 @@ public abstract class Component
         get => _isEnabled;
         set
         {
-            _isEnabled = value;
-            if (value)
-                OnEnable();
+            if (_isEnabled != value)
+            {
+                _isEnabled = value;
+                if (_isEnabled)
+                    OnEnable();
+            }
         }
     }
 
