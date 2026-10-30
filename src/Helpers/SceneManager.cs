@@ -7,13 +7,18 @@ public class SceneManager
 {
 
     private static List<GameObject> _gameObjects = new();
+    private static List<GameObjectData> gameObjectDatas = new();
     private static List<GameObject> _renderableObjects = new();
-    // game objects waiting for their component changes to be applied via applydefferedChanges
     private static Queue<GameObject> _pendingGameObjects = new();
 
     public static void RegisterGameObject(GameObject gameObject)
     {
-        _gameObjects.Add(gameObject);
+        if (!_gameObjects.Contains(gameObject))
+        {
+            GameObjectData data = new GameObjectData(gameObject, gameObject.GetAllValidComponents(), gameObject.GetAllValidRenderableComponents());
+            gameObjectDatas.Add(data);
+            _gameObjects.Add(gameObject);
+        }
     }
     public static void DeRegisterGameObject(GameObject gameObject)
     {
@@ -48,10 +53,11 @@ public class SceneManager
             if (!currGameObject.isEnabled)
                 continue;
 
-            ReadOnlyCollection<Component> components = currGameObject.GetAllValidComponents();
-            for (int j = 0; j < components.Count; j++)
+            GameObjectData data = new GameObjectData(currGameObject, currGameObject.GetAllValidComponents(), currGameObject.GetAllValidRenderableComponents());
+            gameObjectDatas.Add(data);
+            for (int j = 0; j < data.components.Count; j++)
             {
-                Component currentComponent = components[j];
+                Component currentComponent = data.components[j];
                 if (!currentComponent.IsEnabled)
                     continue;
                 currentComponent.Start();
@@ -71,6 +77,7 @@ public class SceneManager
             GatherDrawCalls();
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.Black);
+            Raylib.DrawFPS(1000,500);
             Renderer.Render();
             Raylib.EndDrawing();
             ApplyGameObjectComponentChanges();
@@ -82,15 +89,15 @@ public class SceneManager
     {
         for (int i = 0; i < _gameObjects.Count; i++)
         {
-            GameObject currGameObject = _gameObjects[i];
+            GameObjectData dataObject = gameObjectDatas[i];
 
-            if (!currGameObject.isEnabled)
+            if (!dataObject.gameObject.isEnabled)
                 continue;
 
-            ReadOnlyCollection<Component> components = currGameObject.GetAllValidComponents();
-            for (int j = 0; j < components.Count; j++)
+            // ReadOnlyCollection<Component> components = currGameObject.GetAllValidComponents();
+            for (int j = 0; j < dataObject.components.Count; j++)
             {
-                Component currentComponent = components[j];
+                Component currentComponent = dataObject.components[j];
                 if (!currentComponent.IsEnabled)
                     continue;
                 currentComponent.Update();
@@ -102,15 +109,15 @@ public class SceneManager
     {
         for (int i = 0; i < _renderableObjects.Count; i++)
         {
-            GameObject currGameObject = _renderableObjects[i];
+            GameObjectData currData = gameObjectDatas[i];
+            GameObject currGameObject = currData.gameObject;
 
             if (!currGameObject.isEnabled)
                 continue;
-
-            ReadOnlyCollection<IRenderable> components = currGameObject.GetAllValidRenderableComponents();
-            for (int j = 0; j < components.Count; j++)
+            
+            for (int j = 0; j < currData.renderables.Count; j++)
             {
-                IRenderable currentComponent = components[j];
+                IRenderable currentComponent = currData.renderables[j];
                 currentComponent.Render();
             }
         }
@@ -118,10 +125,14 @@ public class SceneManager
 
     static void ApplyGameObjectComponentChanges()
     {
-        while(_pendingGameObjects.Count > 0)
+        while (_pendingGameObjects.Count > 0)
         {
             GameObject gameObject = _pendingGameObjects.Dequeue();
             gameObject.ProcessDeferredComponentChanges();
+            GameObjectData data = gameObjectDatas.First(key => key.gameObject == gameObject);
+            data.UpdateComponentsList(gameObject.GetAllValidComponents());
+            data.UpdateRenderableList(gameObject.GetAllValidRenderableComponents());
+
         }
     }
 }
